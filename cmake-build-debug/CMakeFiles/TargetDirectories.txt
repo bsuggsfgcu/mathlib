@@ -1,0 +1,4 @@
+/Users/pccimarusti/Desktop/Code/C/mathlib/cmake-build-debug/CMakeFiles/mathlib.dir
+/Users/pccimarusti/Desktop/Code/C/mathlib/cmake-build-debug/CMakeFiles/main_exec.dir
+/Users/pccimarusti/Desktop/Code/C/mathlib/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/pccimarusti/Desktop/Code/C/mathlib/cmake-build-debug/CMakeFiles/rebuild_cache.dir

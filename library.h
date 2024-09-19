@@ -1,0 +1,53 @@
+// Programmer: Paul Cimarusti
+// Date: September 12, 2024
+// Log: Sep 12 2024:
+/* files created, .h and .cpp linked, added executable in CMakeLists.txt,
+ * optional lower bound added to getPrimes function,
+ * multiplicative persistence function added,
+ * collatz function added
+ */
+
+
+#ifndef MATHLIB_LIBRARY_H
+#define MATHLIB_LIBRARY_H
+
+#include<vector>
+#include<iostream>
+#include<cmath>
+
+/**
+ * @brief Generates all prime numbers up to the specified upper bound.
+ *
+ * This function uses the Sieve of Eratosthenes algorithm to generate
+ * a list of prime numbers that are strictly less than the upperBound.
+ *
+ * @param upperBound The maximum number up to which primes are generated.
+ * @return A vector containing all prime numbers between a lower and upper bound.
+ */
+std::vector<int> getPrimes(int upperBound, int lowerBound = 2);
+
+/**
+ * @brief Finds the multiplicative persistence of a number.
+ *
+ * This function converts the provided number between integers and std::string s
+ * in order to treat each digit as a char, multiplies them in a while loop, and
+ * keeps track of the number iterations it takes for their product to be a single digit.
+ *
+ * @param number the number to return the multiplicative persistence of.
+ * @return an integer representing the multiplicative persistence of the input.
+ */
+int getMultiplicativePersistence(int number);
+
+/**
+ * @brief Finds the number of iterations of C(n) it takes to reach 1
+ *
+ * This function uses a while loop and two conditions (is even and is odd)
+ * and repeatedly applies C(n) to determine how many iterations it takes
+ *
+ * @param number the number to find the C(n) iterations of
+ * @return an integer representing the number of iterations it takes C(n) to reach 1
+ */
+int getCollatzNumber(int number);
+
+long double fibonacciIndex(long int number);
+#endif //MATHLIB_LIBRARY_H
