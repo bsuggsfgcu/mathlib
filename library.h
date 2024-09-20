@@ -27,6 +27,17 @@
 std::vector<int> getPrimes(int upperBound, int lowerBound = 2);
 
 /**
+ * @brief Returns a bool (if argument is prime)
+ *
+ * This function uses getPrimes(int upperBound, int lowerBound) as a helper function
+ * to generate all primes up to sqrt(number) and tests if any of them are factors individually
+ *
+ * @param number an integer to be tested for being prime
+ * @return A boolean representing if a number is prime
+ */
+bool isPrime(int number);
+
+/**
  * @brief Finds the multiplicative persistence of a number.
  *
  * This function converts the provided number between integers and std::string s
@@ -50,4 +61,6 @@ int getMultiplicativePersistence(int number);
 int getCollatzNumber(int number);
 
 long double fibonacciIndex(long int number);
+
+std::string derivative(std::string function);
 #endif //MATHLIB_LIBRARY_H
