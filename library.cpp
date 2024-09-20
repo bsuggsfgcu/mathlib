@@ -28,6 +28,19 @@ std::vector<int> getPrimes(int upperBound, int lowerBound){
     return primeNumbers;
 }
 
+bool isPrime(int number)
+{
+    std::vector<int> primes = getPrimes(ceil(sqrt(number))) ;
+    for (const int &p : primes)
+    {
+        if (number % p == 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 int getMultiplicativePersistence(int number) {
     // Converts number to string in order to reference each digit
     std::string strNumber = std::to_string(number);

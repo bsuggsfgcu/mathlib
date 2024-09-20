@@ -26,4 +26,9 @@ int main(){
 
     std::cout << "Fibonacci Index of 100: " << fibonacciIndex(
             7540113804746346429);
+
+
+    std::cout << '\n';
+
+    std::cout << "794 is prime: " << isPrime(-90);
 }
