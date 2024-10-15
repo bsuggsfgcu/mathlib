@@ -6,6 +6,7 @@
  * multiplicative persistence function added,
  * collatz function added
  */
+// Sources: https://favtutor.com/blogs/split-string-cpp#:~:text=The%20strtok()%20function%20is,0)%20at%20the%20delimiter%20position.for splitting strings in tokenize function
 
 
 #ifndef MATHLIB_LIBRARY_H
@@ -63,4 +64,6 @@ int getCollatzNumber(int number);
 long double fibonacciIndex(long int number);
 
 std::string derivative(std::string function);
+
+std::vector<std::string> tokenize(std::string func);
 #endif //MATHLIB_LIBRARY_H

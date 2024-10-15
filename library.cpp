@@ -84,7 +84,8 @@ long double fibonacciIndex(long int number){
     return log(number * sqrt(5)) / log((1+sqrt(5))/2);
 }
 
-std::string derivative(std::string function){
+std::string derivative(std::string function)
+{
     std::vector<std::string> vecFunc;
 
     // Adds a space (which is not a digit) to the end of the input to help with extracting numbers
@@ -147,9 +148,66 @@ std::string derivative(std::string function){
         }
     }
 
-    for (std::string c: vecFunc)
-    {
-        std::cout << c << ' ';
-    }
+
+
+//    for (std::string c: vecFunc)
+//    {
+//        std::cout << c;
+//    }
+
+    std::cout << std::stof(vecFunc[0]) * std::stof(vecFunc[4]);
+    std::cout << "x^";
+    std::cout << std::stof(vecFunc[4]) - 1;
     return num;
+}
+
+std::vector<std::string> tokenize(std::string func)
+{
+    // "List" of string tokens
+    std::vector<std::string> tfunc;
+    // Each new token
+    std::string token;
+
+    // What separates each token
+    char splitStr = '+';
+    // The start and end index of each token
+    int newTokenStartIndex = 0, newTokenEndIndex = 0;
+
+    for (int i = 0; i < func.size(); i++)
+    {
+        if (func[i] != splitStr)
+        {
+            newTokenEndIndex++;
+        }
+        else
+        {
+            for (int j = newTokenStartIndex; j <= newTokenEndIndex; j++)
+            {
+                // Add each character to the string token
+                token.push_back(func[j]);
+            }
+            // Add token to "list" of tokens
+            tfunc.push_back(token);
+
+            newTokenStartIndex = ++newTokenEndIndex;
+
+            // Resets the token
+            token = "";
+        }
+    }
+
+    for (std::string s: tfunc)
+    {
+        std::cout << s << '\n';
+    }
+}
+
+std::string removeWhiteSpace(std::string string)
+{
+    for (int i = 0; i < string.size(); i++)
+    {
+        if (string[i] == ' ')
+            string.erase(i);
+    }
+    return string;
 }
