@@ -15,6 +15,7 @@
 #include<vector>
 #include<iostream>
 #include<cmath>
+#include<fstream>
 
 /**
  * @brief Generates all prime numbers up to the specified upper bound.
@@ -64,6 +65,8 @@ int getCollatzNumber(int number);
 long double fibonacciIndex(long int number);
 
 std::string derivative(std::string function);
+
+void generateTruthTable();
 
 std::vector<std::string> tokenize(std::string func);
 #endif //MATHLIB_LIBRARY_H

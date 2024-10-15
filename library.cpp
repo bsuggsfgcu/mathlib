@@ -80,7 +80,8 @@ int getCollatzNumber(int number) {
     return collatzIterations;
 }
 
-long double fibonacciIndex(long int number){
+long double fibonacciIndex(long int number)
+{
     return log(number * sqrt(5)) / log((1+sqrt(5))/2);
 }
 
@@ -99,7 +100,7 @@ std::string derivative(std::string function)
 
     for (int c = 0; c < function.size(); c++)
     {
-        if (!isnumber(function[c]))
+        if (!isdigit(function[c]))
         {
             for (int j = counter; j >= 1; j--)
             {
@@ -210,4 +211,14 @@ std::string removeWhiteSpace(std::string string)
             string.erase(i);
     }
     return string;
+}
+
+void generateTruthTable()
+{
+    //https://www.w3schools.com/cpp/cpp_files.asp
+    std::ofstream outputFile("LaTeXTable.tex");
+
+    outputFile << "Latex table!!";
+
+    outputFile.close();
 }
