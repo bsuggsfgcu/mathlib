@@ -1,7 +1,5 @@
 #include "library.h"
 
-
-// TODO: Start at the square of a factor
 std::vector<int> getPrimes(int upperBound, int lowerBound){
     std::vector<int> primeNumbers;
     // true: index is prime
@@ -33,7 +31,6 @@ std::vector<int> getPrimes(int upperBound, int lowerBound){
 bool isPrime(int number)
 {
     std::vector<int> primes = getPrimes(ceil(sqrt(number))) ;
-    // std::ranges::all_of only in C++20
     for (const int &p : primes)
     {
         if (number % p == 0)
@@ -83,7 +80,7 @@ int getCollatzNumber(int number) {
     return collatzIterations;
 }
 
-long double fibonacciIndex(long double number){
+long double fibonacciIndex(long int number){
     return log(number * sqrt(5)) / log((1+sqrt(5))/2);
 }
 
@@ -119,27 +116,27 @@ std::string derivative(std::string function)
                 case ' ':
                     break;
                 case 'x':
-                    vecFunc.emplace_back("x");
+                    vecFunc.push_back("x");
 //                    std::cout << "x ";
                     break;
                 case '+':
-                    vecFunc.emplace_back("+");
+                    vecFunc.push_back("+");
 //                    std::cout << "plus ";
                     break;
                 case '-':
-                    vecFunc.emplace_back("-");
+                    vecFunc.push_back("-");
 //                    std::cout << "minus ";
                     break;
                 case '*':
-                    vecFunc.emplace_back("*");
+                    vecFunc.push_back("*");
 //                    std::cout << "multiplication ";
                     break;
                 case '/':
-                    vecFunc.emplace_back("/");
+                    vecFunc.push_back("/");
 //                    std::cout << "division ";
                     break;
                 case '^':
-                    vecFunc.emplace_back("^");
+                    vecFunc.push_back("^");
 //                    std::cout << "exponent ";
                     break;
                 default:
@@ -167,7 +164,7 @@ std::string derivative(std::string function)
 std::vector<std::string> tokenize(std::string func)
 {
     // "List" of string tokens
-    std::vector<std::string> tokenList;
+    std::vector<std::string> tfunc;
     // Each new token
     std::string token;
 
@@ -190,7 +187,7 @@ std::vector<std::string> tokenize(std::string func)
                 token.push_back(func[j]);
             }
             // Add token to "list" of tokens
-            tokenList.push_back(token);
+            tfunc.push_back(token);
 
             newTokenStartIndex = ++newTokenEndIndex;
 
@@ -199,7 +196,7 @@ std::vector<std::string> tokenize(std::string func)
         }
     }
 
-    for (const std::string& s: tokenList)
+    for (std::string s: tfunc)
     {
         std::cout << s << '\n';
     }
@@ -241,4 +238,15 @@ std::vector<std::string> MakeNameList()
         }
     }
     return nameList;
+}
+
+
+void generateTruthTable()
+{
+    //https://www.w3schools.com/cpp/cpp_files.asp
+    std::ofstream outputFile("LaTeXTable.tex");
+
+    outputFile << "Latex table!!";
+
+    outputFile.close();
 }
