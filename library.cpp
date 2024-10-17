@@ -1,5 +1,7 @@
 #include "library.h"
 
+
+// TODO: Start at the square of a factor
 std::vector<int> getPrimes(int upperBound, int lowerBound){
     std::vector<int> primeNumbers;
     // true: index is prime
@@ -31,6 +33,7 @@ std::vector<int> getPrimes(int upperBound, int lowerBound){
 bool isPrime(int number)
 {
     std::vector<int> primes = getPrimes(ceil(sqrt(number))) ;
+    // std::ranges::all_of only in C++20
     for (const int &p : primes)
     {
         if (number % p == 0)
@@ -80,7 +83,7 @@ int getCollatzNumber(int number) {
     return collatzIterations;
 }
 
-long double fibonacciIndex(long int number){
+long double fibonacciIndex(long double number){
     return log(number * sqrt(5)) / log((1+sqrt(5))/2);
 }
 
@@ -116,27 +119,27 @@ std::string derivative(std::string function)
                 case ' ':
                     break;
                 case 'x':
-                    vecFunc.push_back("x");
+                    vecFunc.emplace_back("x");
 //                    std::cout << "x ";
                     break;
                 case '+':
-                    vecFunc.push_back("+");
+                    vecFunc.emplace_back("+");
 //                    std::cout << "plus ";
                     break;
                 case '-':
-                    vecFunc.push_back("-");
+                    vecFunc.emplace_back("-");
 //                    std::cout << "minus ";
                     break;
                 case '*':
-                    vecFunc.push_back("*");
+                    vecFunc.emplace_back("*");
 //                    std::cout << "multiplication ";
                     break;
                 case '/':
-                    vecFunc.push_back("/");
+                    vecFunc.emplace_back("/");
 //                    std::cout << "division ";
                     break;
                 case '^':
-                    vecFunc.push_back("^");
+                    vecFunc.emplace_back("^");
 //                    std::cout << "exponent ";
                     break;
                 default:
@@ -164,7 +167,7 @@ std::string derivative(std::string function)
 std::vector<std::string> tokenize(std::string func)
 {
     // "List" of string tokens
-    std::vector<std::string> tfunc;
+    std::vector<std::string> tokenList;
     // Each new token
     std::string token;
 
@@ -187,7 +190,7 @@ std::vector<std::string> tokenize(std::string func)
                 token.push_back(func[j]);
             }
             // Add token to "list" of tokens
-            tfunc.push_back(token);
+            tokenList.push_back(token);
 
             newTokenStartIndex = ++newTokenEndIndex;
 
@@ -196,7 +199,7 @@ std::vector<std::string> tokenize(std::string func)
         }
     }
 
-    for (std::string s: tfunc)
+    for (const std::string& s: tokenList)
     {
         std::cout << s << '\n';
     }
@@ -210,4 +213,32 @@ std::string removeWhiteSpace(std::string string)
             string.erase(i);
     }
     return string;
+}
+
+std::vector<std::string> MakeNameList()
+{
+    std::vector<std::string> nameList;
+
+    // Declares and defines input based on user, adds space at end to register last character as a new string
+    std::string input;
+    std::cout << "Enter your variables seperated by a space: \n";
+    // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
+    std::getline(std::cin, input );
+    input += " ";
+
+    // Add each string seperated by a space to nameList
+    std::string tempString;
+    for (char c : input)
+    {
+        if (c == ' ')
+        {
+            nameList.push_back(tempString);
+            tempString = "";
+        }
+        else
+        {
+            tempString.push_back(c);
+        }
+    }
+    return nameList;
 }

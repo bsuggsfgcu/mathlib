@@ -23,8 +23,8 @@ int main(){
 //    std::cout << '\n';
 //
 //
-    std::cout << "Multiplicative Persistence of 721: ";
-    std::cout << getMultiplicativePersistence(721);
+//    std::cout << "Multiplicative Persistence of 721: ";
+//    std::cout << getMultiplicativePersistence(721);
 //
 //
 //    std::cout << '\n';
@@ -48,6 +48,12 @@ int main(){
 //    tokenize("4x^3 + 6x^2 + 7x + 1 + 4 + 2 + 4");
 
 //    std::cout << removeWhiteSpace("8x^2+ 6x^3 + 7    + 1");
+
+    std::vector<std::string> list = MakeNameList();
+    for (const std::string& c : list)
+    {
+        std::cout << c << '-';
+    }
 
 }
 

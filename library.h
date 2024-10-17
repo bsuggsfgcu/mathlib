@@ -66,4 +66,7 @@ long double fibonacciIndex(long int number);
 std::string derivative(std::string function);
 
 std::vector<std::string> tokenize(std::string func);
+
+std::vector<std::string> MakeNameList();
+
 #endif //MATHLIB_LIBRARY_H
