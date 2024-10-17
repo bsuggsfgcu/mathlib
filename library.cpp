@@ -200,6 +200,8 @@ std::vector<std::string> tokenize(std::string func)
     {
         std::cout << s << '\n';
     }
+
+    return tfunc;
 }
 
 std::string removeWhiteSpace(std::string string)
@@ -240,13 +242,68 @@ std::vector<std::string> MakeNameList()
     return nameList;
 }
 
-
-void generateTruthTable()
+void GenerateLaTeXDocument()
 {
     //https://www.w3schools.com/cpp/cpp_files.asp
     std::ofstream outputFile("LaTeXTable.tex");
 
-    outputFile << "Latex table!!";
+    std::vector<std::string> packageList = {"amsmath, simpsons"};
+    outputFile << GenerateLaTeXHeader(packageList);
 
+    outputFile << "\\begin{document}\n";
+    // Makes Truth Table
+    std::vector<std::string> nameList = MakeNameList();
+    std::string truthTable = GenerateTruthTable(nameList);
+    outputFile << truthTable;
+
+    outputFile << "\\end{document}";
     outputFile.close();
 }
+
+std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList)
+{
+    std::string header = "\\documentclass{article}\n"
+                         "\\pagestyle{fancy}\n";
+
+    header += "\\usepackage{";
+    for (int packageListIndex = 0; packageListIndex < packageList.size(); packageListIndex++)
+    {
+        if (packageListIndex != packageList.size() - 1)
+            header += packageList[packageListIndex] + ", ";
+        else
+            header += packageList[packageListIndex] + "}\n";
+    }
+
+    header += "\\lhead{GeneratedTextDocument}\n"
+              "\\rhead{Raven Suggs and Paul Cimarusti}\n";
+    return header;
+}
+
+std::string GenerateTruthTable(std::vector<std::string> nameList)
+{
+    std::string truthTable = "\\begin{center}\n"
+                             "\t \\begin{tabular}";
+
+    std::string columnsString = "{";
+    for (int columnNumber = 0; columnNumber < nameList.size(); columnNumber++)
+    {
+        if (columnNumber != nameList.size() - 1)
+            columnsString += "c | ";
+        else
+            columnsString += "c}\n";
+    }
+    truthTable +=  columnsString;
+
+    std::string nameString;
+    for (int varIndex = 0; varIndex < nameList.size(); varIndex++)
+    {
+        if (varIndex != nameList.size() - 1)
+            nameString += "$" + nameList[varIndex] + "$ & ";
+        else
+            nameString += "$" + nameList[varIndex] + "$";
+    }
+    truthTable += "\t \t" + nameString + " \\\\\n";
+
+    return truthTable;
+}
+
