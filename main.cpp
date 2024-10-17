@@ -49,11 +49,13 @@ int main(){
 
 //    std::cout << removeWhiteSpace("8x^2+ 6x^3 + 7    + 1");
 
-    std::vector<std::string> list = MakeNameList();
-    for (const std::string& c : list)
-    {
-        std::cout << c << '-';
-    }
+//    std::vector<std::string> list = MakeNameList();
+//    for (const std::string& c : list)
+//    {
+//        std::cout << c << '-';
+//    }
+
+    GenerateLaTeXDocument();
 
 }
 

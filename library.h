@@ -71,5 +71,8 @@ void generateTruthTable();
 std::vector<std::string> tokenize(std::string func);
 
 std::vector<std::string> MakeNameList();
+void GenerateLaTeXDocument();
+std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList);
+std::string GenerateTruthTable(std::vector<std::string> nameList);
 
 #endif //MATHLIB_LIBRARY_H

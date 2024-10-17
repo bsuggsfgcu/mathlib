@@ -304,6 +304,7 @@ std::string GenerateTruthTable(std::vector<std::string> nameList)
     }
     truthTable += "\t \t" + nameString + " \\\\\n";
 
+
     return truthTable;
 }
 
