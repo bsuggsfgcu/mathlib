@@ -1,6 +1,89 @@
 #include "library.h"
 
-std::vector<int> getPrimes(int upperBound, int lowerBound){
+// Utilities
+std::string Utilities::removeWhiteSpace(std::string string)
+{
+    for (int i = 0; i < string.size(); i++)
+    {
+        if (string[i] == ' ')
+            string.erase(i);
+    }
+    return string;
+}
+
+// TODO PAUL: Implement dynamic Polynomial Variable way to differentiate
+std::vector<std::string> Utilities::tokenize(std::string func)
+{
+    // "List" of string tokens
+    std::vector<std::string> tokenizedFunc;
+    // Each new token
+    std::string token;
+
+    // What separates each token
+    char splitStr = '+';
+    // The start and end index of each token
+    int newTokenStartIndex = 0, newTokenEndIndex = 0;
+
+    for (int i = 0; i < func.size(); i++)
+    {
+        if (func[i] != splitStr)
+        {
+            newTokenEndIndex++;
+        }
+        else
+        {
+            for (int j = newTokenStartIndex; j <= newTokenEndIndex; j++)
+            {
+                // Add each character to the string token
+                token.push_back(func[j]);
+            }
+            // Add token to "list" of tokens
+            tokenizedFunc.push_back(token);
+
+            newTokenStartIndex = ++newTokenEndIndex;
+
+            // Resets the token
+            token = "";
+        }
+    }
+
+    for (const std::string& s: tokenizedFunc)
+    {
+        std::cout << s << '\n';
+    }
+
+    return tokenizedFunc;
+}
+
+// Instead of making a vector representing each token, we can make a vector representing each function
+std::vector<std::string> Utilities::funcTokenize(std::string input)
+{
+    input = removeWhiteSpace(input);
+    std::vector<std::string> tokenizedFunc;
+
+
+    bool parenEnv = false; // Boolean stating if we are inside parenthesis
+    std::string tempString;
+    for (char inputChar : input)
+    {
+        if (inputChar == '(')
+            parenEnv = true;
+        else if (inputChar == ')')
+            parenEnv = false;
+
+
+        if (parenEnv)
+            tempString += inputChar;
+
+
+    }
+    std::cout << tempString << '\n';
+    return tokenizedFunc;
+}
+
+
+// Number Theory
+std::vector<int> NumberTheory::getPrimes(int upperBound, int lowerBound){
     std::vector<int> primeNumbers;
     // true: index is prime
     // false: index is not prime
@@ -28,20 +111,16 @@ std::vector<int> getPrimes(int upperBound, int lowerBound){
     return primeNumbers;
 }
 
-bool isPrime(int number)
+bool NumberTheory::isPrime(int number)
 {
     std::vector<int> primes = getPrimes(ceil(sqrt(number))) ;
-    for (const int &p : primes)
-    {
-        if (number % p == 0)
-        {
-            return false;
-        }
-    }
+    // https://www.geeksforgeeks.org/stdall_of-in-cpp/
+    if (std::ranges::any_of(primes, [&number](int p) {return number % p == 0;}))
+        return false;
     return true;
 }
 
-int getMultiplicativePersistence(int number) {
+int NumberTheory::getMultiplicativePersistence(int number) {
     // Converts number to string in order to reference each digit
     std::string strNumber = std::to_string(number);
 
@@ -62,7 +141,7 @@ int getMultiplicativePersistence(int number) {
     return iterations;
 }
 
-int getCollatzNumber(int number) {
+int NumberTheory::getCollatzNumber(int number) {
     int collatzIterations = 0;
     // The collatz conjecture states that all numbers will reach one
     // when C(n) is applied recursively
@@ -80,11 +159,13 @@ int getCollatzNumber(int number) {
     return collatzIterations;
 }
 
-long double fibonacciIndex(long int number){
+long double NumberTheory::fibonacciIndex(int number){
     return log(number * sqrt(5)) / log((1+sqrt(5))/2);
 }
 
-std::string derivative(std::string function)
+
+// Calculus
+std::string Calculus::derivative(std::string function)
 {
     std::vector<std::string> vecFunc;
 
@@ -116,27 +197,27 @@ std::string derivative(std::string function)
                 case ' ':
                     break;
                 case 'x':
-                    vecFunc.push_back("x");
+                    vecFunc.emplace_back("x");
 //                    std::cout << "x ";
                     break;
                 case '+':
-                    vecFunc.push_back("+");
+                    vecFunc.emplace_back("+");
 //                    std::cout << "plus ";
                     break;
                 case '-':
-                    vecFunc.push_back("-");
+                    vecFunc.emplace_back("-");
 //                    std::cout << "minus ";
                     break;
                 case '*':
-                    vecFunc.push_back("*");
+                    vecFunc.emplace_back("*");
 //                    std::cout << "multiplication ";
                     break;
                 case '/':
-                    vecFunc.push_back("/");
+                    vecFunc.emplace_back("/");
 //                    std::cout << "division ";
                     break;
                 case '^':
-                    vecFunc.push_back("^");
+                    vecFunc.emplace_back("^");
 //                    std::cout << "exponent ";
                     break;
                 default:
@@ -161,61 +242,11 @@ std::string derivative(std::string function)
     return num;
 }
 
-std::vector<std::string> tokenize(std::string func)
+
+// LaTeX
+std::vector<std::string> LaTeX::MakeNameList()
 {
-    // "List" of string tokens
-    std::vector<std::string> tfunc;
-    // Each new token
-    std::string token;
-
-    // What separates each token
-    char splitStr = '+';
-    // The start and end index of each token
-    int newTokenStartIndex = 0, newTokenEndIndex = 0;
-
-    for (int i = 0; i < func.size(); i++)
-    {
-        if (func[i] != splitStr)
-        {
-            newTokenEndIndex++;
-        }
-        else
-        {
-            for (int j = newTokenStartIndex; j <= newTokenEndIndex; j++)
-            {
-                // Add each character to the string token
-                token.push_back(func[j]);
-            }
-            // Add token to "list" of tokens
-            tfunc.push_back(token);
-
-            newTokenStartIndex = ++newTokenEndIndex;
-
-            // Resets the token
-            token = "";
-        }
-    }
-
-    for (std::string s: tfunc)
-    {
-        std::cout << s << '\n';
-    }
-
-    return tfunc;
-}
-
-std::string removeWhiteSpace(std::string string)
-{
-    for (int i = 0; i < string.size(); i++)
-    {
-        if (string[i] == ' ')
-            string.erase(i);
-    }
-    return string;
-}
-
-std::vector<std::string> MakeNameList()
-{
+    // The final list to be returned
     std::vector<std::string> nameList;
 
     // Declares and defines input based on user, adds space at end to register last character as a new string
@@ -223,7 +254,7 @@ std::vector<std::string> MakeNameList()
     std::cout << "Enter your variables seperated by a space: \n";
     // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
     std::getline(std::cin, input );
-    input += " ";
+    input += " "; // Adds space at end so the last character is added to nameList
 
     // Add each string seperated by a space to nameList
     std::string tempString;
@@ -232,22 +263,21 @@ std::vector<std::string> MakeNameList()
         if (c == ' ')
         {
             nameList.push_back(tempString);
-            tempString = "";
+            tempString = ""; // Resets the temporary string
         }
         else
-        {
             tempString.push_back(c);
-        }
     }
     return nameList;
 }
 
-void GenerateLaTeXDocument()
+// TODO RAVEN: Fix please
+void LaTeX::GenerateLaTeXDocument()
 {
     //https://www.w3schools.com/cpp/cpp_files.asp
     std::ofstream outputFile("LaTeXTable.tex");
 
-    std::vector<std::string> packageList = {"amsmath, simpsons"};
+    std::vector<std::string> packageList = {"amsmath"}; // use simpsons not working :(
     outputFile << GenerateLaTeXHeader(packageList);
 
     outputFile << "\\begin{document}\n";
@@ -260,7 +290,7 @@ void GenerateLaTeXDocument()
     outputFile.close();
 }
 
-std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList)
+std::string LaTeX::GenerateLaTeXHeader(const std::vector<std::string>& packageList)
 {
     std::string header = "\\documentclass{article}\n"
                          "\\pagestyle{fancy}\n";
@@ -268,9 +298,9 @@ std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList)
     header += "\\usepackage{";
     for (int packageListIndex = 0; packageListIndex < packageList.size(); packageListIndex++)
     {
-        if (packageListIndex != packageList.size() - 1)
+        if (packageListIndex != packageList.size() - 1) // If the current package is not the last in the list
             header += packageList[packageListIndex] + ", ";
-        else
+        else                                            // If this is the last package
             header += packageList[packageListIndex] + "}\n";
     }
 
@@ -279,7 +309,7 @@ std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList)
     return header;
 }
 
-std::string GenerateTruthTable(std::vector<std::string> nameList)
+std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList)
 {
     std::string truthTable = "\\begin{center}\n"
                              "\t \\begin{tabular}";
@@ -304,7 +334,5 @@ std::string GenerateTruthTable(std::vector<std::string> nameList)
     }
     truthTable += "\t \t" + nameString + " \\\\\n";
 
-
     return truthTable;
 }
-
