@@ -11,76 +11,75 @@ std::string Utilities::removeWhiteSpace(std::string string)
     return string;
 }
 
-// TODO PAUL: Implement dynamic Polynomial Variable way to differentiate
-std::vector<std::string> Utilities::tokenize(std::string func)
-{
-    // "List" of string tokens
-    std::vector<std::string> tokenizedFunc;
-    // Each new token
-    std::string token;
+//// TODO PAUL: Implement dynamic Polynomial Variable way to differentiate
+//std::vector<std::string> Utilities::tokenize(std::string func)
+//{
+//    // "List" of string tokens
+//    std::vector<std::string> tokenizedFunc;
+//    // Each new token
+//    std::string token;
+//
+//    // What separates each token
+//    char splitStr = '+';
+//    // The start and end index of each token
+//    int newTokenStartIndex = 0, newTokenEndIndex = 0;
+//
+//    for (int i = 0; i < func.size(); i++)
+//    {
+//        if (func[i] != splitStr)
+//        {
+//            newTokenEndIndex++;
+//        }
+//        else
+//        {
+//            for (int j = newTokenStartIndex; j <= newTokenEndIndex; j++)
+//            {
+//                // Add each character to the string token
+//                token.push_back(func[j]);
+//            }
+//            // Add token to "list" of tokens
+//            tokenizedFunc.push_back(token);
+//
+//            newTokenStartIndex = ++newTokenEndIndex;
+//
+//            // Resets the token
+//            token = "";
+//        }
+//    }
+//
+//    for (const std::string& s: tokenizedFunc)
+//    {
+//        std::cout << s << '\n';
+//    }
+//
+//    return tokenizedFunc;
+//}
 
-    // What separates each token
-    char splitStr = '+';
-    // The start and end index of each token
-    int newTokenStartIndex = 0, newTokenEndIndex = 0;
-
-    for (int i = 0; i < func.size(); i++)
-    {
-        if (func[i] != splitStr)
-        {
-            newTokenEndIndex++;
-        }
-        else
-        {
-            for (int j = newTokenStartIndex; j <= newTokenEndIndex; j++)
-            {
-                // Add each character to the string token
-                token.push_back(func[j]);
-            }
-            // Add token to "list" of tokens
-            tokenizedFunc.push_back(token);
-
-            newTokenStartIndex = ++newTokenEndIndex;
-
-            // Resets the token
-            token = "";
-        }
-    }
-
-    for (const std::string& s: tokenizedFunc)
-    {
-        std::cout << s << '\n';
-    }
-
-    return tokenizedFunc;
-}
-
-// Instead of making a vector representing each token, we can make a vector representing each function
-std::vector<std::string> Utilities::funcTokenize(std::string input)
-{
-    input = removeWhiteSpace(input);
-    std::vector<std::string> tokenizedFunc;
-
-
-    bool parenEnv = false; // Boolean stating if we are inside parenthesis
-    std::string tempString;
-    for (char inputChar : input)
-    {
-        if (inputChar == '(')
-            parenEnv = true;
-        else if (inputChar == ')')
-            parenEnv = false;
-
-
-        if (parenEnv)
-            tempString += inputChar;
-
-
-    }
-    std::cout << tempString << '\n';
-    return tokenizedFunc;
-}
-
+//// Instead of making a vector representing each token, we can make a vector representing each function
+//std::vector<std::string> Utilities::funcTokenize(std::string input)
+//{
+//    input = removeWhiteSpace(input);
+//    std::vector<std::string> tokenizedFunc;
+//
+//
+//    bool parenEnv = false; // Boolean stating if we are inside parenthesis
+//    std::string tempString;
+//    for (char inputChar : input)
+//    {
+//        if (inputChar == '(')
+//            parenEnv = true;
+//        else if (inputChar == ')')
+//            parenEnv = false;
+//
+//
+//        if (parenEnv)
+//            tempString += inputChar;
+//
+//
+//    }
+//    std::cout << tempString << '\n';
+//    return tokenizedFunc;
+//}
 
 // Number Theory
 std::vector<int> NumberTheory::getPrimes(int upperBound, int lowerBound){
@@ -165,8 +164,14 @@ long double NumberTheory::fibonacciIndex(int number){
 
 
 // Calculus
-std::string Calculus::derivative(std::string function)
+Function::Function(std::string input)
 {
+    Function::string = input;
+}
+
+std::string Function::derivative()
+{
+    std::string function = Function::string;
     std::vector<std::string> vecFunc;
 
     // Adds a space (which is not a digit) to the end of the input to help with extracting numbers
