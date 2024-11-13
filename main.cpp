@@ -1,13 +1,15 @@
 #include "library.h"
-void exMain();
+void NumberTheoryMain();
 void calcMain();
+void LaTexMain();
 
 int main(){
-   calcMain();
+   //calcMain();
+    LaTexMain();
 }
 
 // Examples of how to implement library
-void exMain()
+void NumberTheoryMain()
 {
     // Utilities
 
@@ -41,18 +43,7 @@ void exMain()
 
     std::cout << "794 is prime: " << NumberTheory::isPrime(-90);
 
-    // Calculus
-//    Derivative("50x^4");
 
-
-//     LaTeX
-//    std::vector<std::string> list = LaTeX::MakeNameList();
-//    for (const std::string& c : list)
-//    {
-//        std::cout << c << '-';
-//    }
-
-    LaTeX::GenerateLaTeXDocument();
 }
 
 void calcMain()
@@ -65,4 +56,16 @@ void calcMain()
     std::cout << func  + '\n';
     Function function = Function(func);
     function.Derivative();
+}
+
+void LaTexMain()
+{
+
+    // //     LaTeX
+    // std::vector<std::string> list = LaTeX::MakeNameList();
+    // for (const std::string& c : list)
+    // {
+    //     std::cout << c << '-';
+    // }
+    LaTeX::GenerateLaTeXDocument();
 }

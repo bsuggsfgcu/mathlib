@@ -16,6 +16,7 @@
 #include<iostream>
 #include<cmath>
 #include<fstream>
+#include<algorithm>
 #include<cstdlib>
 #include<utility>
 

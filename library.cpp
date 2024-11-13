@@ -204,8 +204,7 @@ void LaTeX::GenerateLaTeXDocument()
 
 std::string LaTeX::GenerateLaTeXHeader(const std::vector<std::string>& packageList)
 {
-    std::string header = "\\documentclass{article}\n"
-                         "\\pagestyle{fancy}\n";
+    std::string header = "\\documentclass{article}\n";
 
     header += "\\usepackage{";
     for (int packageListIndex = 0; packageListIndex < packageList.size(); packageListIndex++)
@@ -216,7 +215,8 @@ std::string LaTeX::GenerateLaTeXHeader(const std::vector<std::string>& packageLi
             header += packageList[packageListIndex] + "}\n";
     }
 
-    header += "\\lhead{GeneratedTextDocument}\n"
+    header += "\\pagestyle{fancy}\n"
+              "\\lhead{GeneratedTextDocument}\n"
               "\\rhead{Raven Suggs and Paul Cimarusti}\n";
     return header;
 }
@@ -245,6 +245,8 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList)
             nameString += "$" + nameList[varIndex] + "$";
     }
     truthTable += "\t \t" + nameString + " \\\\\n";
+    truthTable += "\t \\end{tabular}\n";
+    truthTable += "\\end{center}\n";
 
     return truthTable;
 }
