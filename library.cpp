@@ -1,3 +1,5 @@
+//Sources: https://www.geeksforgeeks.org/stdstringinsert-in-c/
+//         https://www.scaler.com/topics/cpp/binary-representation-of-a-number/
 #include "library.h"
 
 
@@ -287,6 +289,8 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
             headerString += "$" + nameList[varIndex] + "$";
     }
     //Logical Expressions header
+    //Need to fix formatting so that the entered &&, ||, ->, <>, use proper formatting on the table for the condition
+    //& is a key character for LaTeX so using it without a \ breaks compilation
     if(!logicList.empty())
     {
         for (int logicIndex = 0; logicIndex < logicList.size(); logicIndex++)
@@ -300,13 +304,50 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
     truthTable += "\t \t" + headerString + " \\\\\n";
 
     //Making Truth Table body
-    int columns = static_cast<int>(nameList.size());
+    int columns = static_cast<int>(nameList.size() + logicList.size());
     int rows = static_cast<int>(pow(2, columns));
     bool truth[columns][rows];
-    //Fill truth values for each row
-    for(int truthRow = 0; truthRow < rows; truthRow++)
+    for(int rowIndex = 0; rowIndex < rows; rowIndex++)
     {
+        int binaryNumber = 0, remainder, rowNumber = rowIndex, digitPlace = 1;
+        while(rowNumber != 0)
+        {
+            remainder = rowNumber % 2;
 
+            rowNumber = rowNumber / 2;
+            binaryNumber = binaryNumber + remainder * digitPlace;
+
+            digitPlace = digitPlace * 10;
+        }
+
+        //Converting the binary representation into a string so that we can match its size to the columnIndex
+        std::string binaryStr = std::to_string(binaryNumber);
+        while(binaryStr.length() < columns)
+        {
+            binaryStr.insert(binaryStr.begin(), '0');
+        }
+        std::cout << binaryStr << std::endl;
+        //Setting truth table column truth value to be false if the binary number has a 1 in its index
+        for(int columnIndex = 0; columnIndex < columns - logicList.size(); columnIndex++)
+        {
+            if(binaryStr[columnIndex] == 1)
+            {
+                truth[columnIndex][rowIndex] = true;
+            }
+            else
+            {
+                truth[columnIndex][rowIndex] = false;
+            }
+        }
+        //Now we add the logic expressions for this row to the 2-D truth array
+        //Need to find out how to read user input and use built-in boolean to handle
+        //I think a good way to do it is to utilize the NamesList list and get the index of that variable when it is found in the logic expression input
+        for(int columnIndex = columns - logicList.size(); columnIndex < columns; columnIndex++)
+        {
+            
+        }
+
+        //Finally print the completed row to the latex document with proper formatting
     }
     truthTable += "\t \\end{tabular}\n";
     truthTable += "\\end{center}\n";
