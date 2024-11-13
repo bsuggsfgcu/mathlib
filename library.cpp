@@ -191,12 +191,18 @@ std::vector<std::string> MakeLogicExpressionList()
     // Declares and defines input based on user, adds space at end to register last character as a new string
     std::string input;
     std::cout << "Enter your logic expressions separated by a space: \n";
+    std::cout << "! for negation\n";
     std::cout << "&& for and (conjuction)\n";
     std::cout << "|| for logical or (disjunction)\n";
     std::cout << "-> for conditional\n";
     std::cout << "<> for bijunction\n";
     // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
     std::getline(std::cin, input );
+    //Return early if user entered empty input, so that the return is an empty vector instead of a vector with one element which is an empty string "".
+    if(input.empty())
+    {
+        return logicList;
+    }
     input += " "; // Adds space at end so the last character is added to logicList
 
     // Add each string seperated by a space to logicList
