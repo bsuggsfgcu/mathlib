@@ -1,12 +1,15 @@
 #include "library.h"
-void exMain();
+void NumberTheoryMain();
+void calcMain();
+void LaTexMain();
 
 int main(){
-    exMain();
+   //calcMain();
+    LaTexMain();
 }
 
 // Examples of how to implement library
-void exMain()
+void NumberTheoryMain()
 {
     // Utilities
 
@@ -17,7 +20,7 @@ void exMain()
 
     // Number Theory
     std::cout << "Primes between 1 and 100: ";
-    std::vector<int> a = NumberTheory::getPrimes(100);
+    std::vector<int> a = NumberTheory::getPrimes(100, 80);
     for (const int &i : a){
         std::cout << i << ' ';
     }
@@ -40,22 +43,29 @@ void exMain()
 
     std::cout << "794 is prime: " << NumberTheory::isPrime(-90);
 
-    // Calculus
-//    derivative("50x^4");
 
+}
 
-    // LaTeX
-//    std::vector<std::string> list = MakeNameList();
-//    for (const std::string& c : list)
-//    {
-//        std::cout << c << '-';
-//    }
-//
-//    GenerateLaTeXDocument();
-//
+void calcMain()
+{
 //    std::string func;
 //    std::cout << "Enter a function: ";
-//    std::cin >> func;
-//    std::string stringFunc = removeWhiteSpace(func);
-//    funcTokenize(stringFunc);
+//    std::getline(std::cin, func);
+
+    std::string func = "7*(x^4+2)-4(x^2)+2";
+    std::cout << func  + '\n';
+    Function function = Function(func);
+    function.Derivative();
+}
+
+void LaTexMain()
+{
+
+    // //     LaTeX
+    // std::vector<std::string> list = LaTeX::MakeNameList();
+    // for (const std::string& c : list)
+    // {
+    //     std::cout << c << '-';
+    // }
+    LaTeX::GenerateLaTeXDocument();
 }

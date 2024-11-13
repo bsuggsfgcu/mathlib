@@ -12,10 +12,13 @@
 #define MATHLIB_LIBRARY_H
 
 #include<vector>
+#include<map>
 #include<iostream>
 #include<cmath>
 #include<fstream>
+#include<algorithm>
 #include<cstdlib>
+#include<utility>
 
 class Utilities
 {
@@ -26,15 +29,6 @@ public:
      * @return string
      */
     static std::string removeWhiteSpace(std::string string);
-    //    // TODO -> Paul: Add comment
-//    static std::vector<std::string> tokenize(std::string func);
-//
-//    /**
-//     * @brief tokenizes a function into an array of strings
-//     * @param input: a string representing a function (without whitespace)
-//     * @return std::vector<std::string> a list of string tokens
-//     */
-//    static std::vector<std::string> funcTokenize(std::string input);
 };
 
 // TODO: Paul Flow Charts for Number Theory
@@ -87,28 +81,26 @@ public:
 };
 
 // TODO: Cesar Error Handling (You'll get a std::string, if the function is not valid please return a string explaining why)
-// TODO: Paul and Raven break up string via "open" + or - and constants
 class Function
 {
 public:
-    Function(std::string input);
+    explicit Function(std::string input);
     std::string string;
 
     /**
-     * @brief returns the derivative of a single variable function
+     * @brief returns the Derivative of a single variable function
      * @param function (any variable can be used)
-     * @return a string representing the derivative of the given function
+     * @return a string representing the Derivative of the given function
      */
-    std::string derivative();
+    std::string Derivative() const;
 };
 
-// TODO: Paul Finish LaTeX
 class LaTeX {
 public:
-    std::vector<std::string> MakeNameList();
-    void GenerateLaTeXDocument();
-    std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList);
-    std::string GenerateTruthTable(std::vector<std::string> nameList);
+    static std::vector<std::string> MakeNameList();
+    static void GenerateLaTeXDocument();
+    static std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList);
+    static std::string GenerateTruthTable(std::vector<std::string> nameList);
 };
 
 #endif //MATHLIB_LIBRARY_H
