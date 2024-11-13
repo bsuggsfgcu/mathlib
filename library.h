@@ -100,7 +100,7 @@ public:
     static std::vector<std::string> MakeNameList();
     static void GenerateLaTeXDocument();
     static std::string GenerateLaTeXHeader(const std::vector<std::string>& packageList);
-    static std::string GenerateTruthTable(std::vector<std::string> nameList);
+    static std::string GenerateTruthTable(std::vector<std::string> nameList, std::vector<std::string> logicList);
 };
 
 #endif //MATHLIB_LIBRARY_H
