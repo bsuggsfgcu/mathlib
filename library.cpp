@@ -164,7 +164,7 @@ std::vector<std::string> LaTeX::MakeNameList()
 
     // Declares and defines input based on user, adds space at end to register last character as a new string
     std::string input;
-    std::cout << "Enter your variables seperated by a space: \n";
+    std::cout << "Enter your variables separated by a space: \n";
     // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
     std::getline(std::cin, input );
     input += " "; // Adds space at end so the last character is added to nameList
@@ -183,20 +183,52 @@ std::vector<std::string> LaTeX::MakeNameList()
     }
     return nameList;
 }
+std::vector<std::string> MakeLogicExpressionList()
+{
+    // The final list to be returned
+    std::vector<std::string> logicList;
+
+    // Declares and defines input based on user, adds space at end to register last character as a new string
+    std::string input;
+    std::cout << "Enter your logic expressions separated by a space: \n";
+    std::cout << "&& for and (conjuction)\n";
+    std::cout << "|| for logical or (disjunction)\n";
+    std::cout << "-> for conditional\n";
+    std::cout << "<> for bijunction\n";
+    // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
+    std::getline(std::cin, input );
+    input += " "; // Adds space at end so the last character is added to logicList
+
+    // Add each string seperated by a space to logicList
+    std::string tempString;
+    for (char c : input)
+    {
+        if (c == ' ')
+        {
+            logicList.push_back(tempString);
+            tempString = ""; // Resets the temporary string
+        }
+        else
+            tempString.push_back(c);
+    }
+    return logicList;
+}
 
 void LaTeX::GenerateLaTeXDocument()
 {
     //https://www.w3schools.com/cpp/cpp_files.asp
     std::ofstream outputFile("LaTeXTable.tex");
 
-    std::vector<std::string> packageList = {"amsmath"}; // use simpsons not working :(
+    std::vector<std::string> packageList = {"amsmath", "fancyhdr"}; // use simpsons not working :(
     outputFile << GenerateLaTeXHeader(packageList);
 
     outputFile << "\\begin{document}\n";
     // Makes Truth Table
     std::vector<std::string> nameList = MakeNameList();
-    std::string truthTable = GenerateTruthTable(nameList);
+    std::vector<std::string> logicList = MakeLogicExpressionList();
+    std::string truthTable = GenerateTruthTable(nameList, logicList);
     outputFile << truthTable;
+    std::cout << "Truth table generated.";
 
     outputFile << "\\end{document}";
     outputFile.close();
@@ -221,30 +253,55 @@ std::string LaTeX::GenerateLaTeXHeader(const std::vector<std::string>& packageLi
     return header;
 }
 
-std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList)
+std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::vector<std::string> logicList)
 {
     std::string truthTable = "\\begin{center}\n"
                              "\t \\begin{tabular}";
 
+    //Telling table how many columns it will have
     std::string columnsString = "{";
-    for (int columnNumber = 0; columnNumber < nameList.size(); columnNumber++)
+    for (int columnNumber = 0; columnNumber < nameList.size() + logicList.size(); columnNumber++)
     {
-        if (columnNumber != nameList.size() - 1)
+        if (columnNumber < nameList.size() + logicList.size() - 1)
             columnsString += "c | ";
         else
             columnsString += "c}\n";
     }
     truthTable +=  columnsString;
 
-    std::string nameString;
+    std::string headerString;
+    //Making Truth Table header
+    //Variable names header
     for (int varIndex = 0; varIndex < nameList.size(); varIndex++)
     {
-        if (varIndex != nameList.size() - 1)
-            nameString += "$" + nameList[varIndex] + "$ & ";
+        //logicList.empty is to check if there are any logic statements to keep formatting correct
+        if (varIndex < nameList.size() - 1 || !logicList.empty())
+            headerString += "$" + nameList[varIndex] + "$ & ";
         else
-            nameString += "$" + nameList[varIndex] + "$";
+            headerString += "$" + nameList[varIndex] + "$";
     }
-    truthTable += "\t \t" + nameString + " \\\\\n";
+    //Logical Expressions header
+    if(!logicList.empty())
+    {
+        for (int logicIndex = 0; logicIndex < logicList.size(); logicIndex++)
+        {
+            if (logicIndex < logicList.size() - 1)
+                headerString += "$" + logicList[logicIndex] + "$ & ";
+            else
+                headerString += "$" + logicList[logicIndex] + "$";
+        }
+    }
+    truthTable += "\t \t" + headerString + " \\\\\n";
+
+    //Making Truth Table body
+    int columns = static_cast<int>(nameList.size());
+    int rows = static_cast<int>(pow(2, columns));
+    bool truth[columns][rows];
+    //Fill truth values for each row
+    for(int truthRow = 0; truthRow < rows; truthRow++)
+    {
+
+    }
     truthTable += "\t \\end{tabular}\n";
     truthTable += "\\end{center}\n";
 

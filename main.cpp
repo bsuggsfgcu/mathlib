@@ -60,12 +60,5 @@ void calcMain()
 
 void LaTexMain()
 {
-
-    // //     LaTeX
-    // std::vector<std::string> list = LaTeX::MakeNameList();
-    // for (const std::string& c : list)
-    // {
-    //     std::cout << c << '-';
-    // }
     LaTeX::GenerateLaTeXDocument();
 }
