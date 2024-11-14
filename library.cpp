@@ -58,10 +58,8 @@ int NumberTheory::getMultiplicativePersistence(int number) {
     do {
         product = 1;
         // for each digit in number
-        for (int i = 0; i < strNumber.length(); i++) {
+        for (int i = 0; i < strNumber.length(); i++)
             product *= strNumber[i] - '0'; // - '0' converts a char to an int
-        }
-
         iterations ++;
         strNumber = std::to_string(product);
 //        std::cout << product << ", " << iterations << "\n";
@@ -69,19 +67,19 @@ int NumberTheory::getMultiplicativePersistence(int number) {
     return iterations;
 }
 
-int NumberTheory::getCollatzNumber(int number) {
+int NumberTheory::getCollatzNumber(int number)
+{
     int collatzIterations = 0;
     // The collatz conjecture states that all numbers will reach one
     // when C(n) is applied recursively
-    while (number != 1) {
+    while (number != 1)
+    {
         // If n is odd
-        if (number % 2 == 1) {
+        if (number % 2 == 1)
             number = number * 3 + 1;
-        }
         // if n is even
-        else {
+        else
             number /= 2;
-        }
         collatzIterations ++;
     }
     return collatzIterations;
@@ -138,6 +136,31 @@ std::vector<std::string> OpenLevel0Break(std::string func)
     return openLevel0Functions;
 }
 
+std::map<std::string, std::string> OpenLevel1Break(std::string func)
+{
+    std::map<std::string, std::string> openLevel1Functions;
+
+    int parensNum = 0;
+
+    for (int index = 0; index < func.size(); index++)
+    {
+        if (func[index] == '(')
+            parensNum++;
+        else if (func[index] == ')')
+            parensNum--;
+
+        if (!parensNum)
+        {
+            if (func[index] == '*' || func[index] == '/')
+            {
+                std::string tempString;
+            }
+        }
+    }
+
+
+}
+
 std::string Function::Derivative() const
 {
     std::string func = Function::string;
@@ -146,6 +169,9 @@ std::string Function::Derivative() const
 
     // Break up open level zero operations
     std::vector<std::string> level0Func = OpenLevel0Break(func);
+
+    // Take out constants
+
 
     // Print each part
 //    for (const auto & index : level0Func)
