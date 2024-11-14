@@ -194,7 +194,10 @@ std::vector<std::string> LaTeX::MakeNameList()
     std::string input;
     std::cout << "Enter your variables separated by a space: \n";
     // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
-    std::getline(std::cin, input );
+
+    while (input.empty())
+        std::getline(std::cin, input );
+
     input += " "; // Adds space at end so the last character is added to nameList
 
     // Add each string seperated by a space to nameList
@@ -211,6 +214,7 @@ std::vector<std::string> LaTeX::MakeNameList()
     }
     return nameList;
 }
+
 std::vector<std::string> MakeLogicExpressionList()
 {
     // The final list to be returned
@@ -351,9 +355,7 @@ std::string LogicToLaTeXFormat(std::string input)
 std::string TruthToLaTeXFormat(bool truth)
 {
     if(truth)
-    {
         return "T";
-    }
     return "F";
 }
 
