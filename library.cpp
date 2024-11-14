@@ -257,8 +257,78 @@ std::string LaTeX::GenerateLaTeXHeader(const std::vector<std::string>& packageLi
 
     header += "\\pagestyle{fancy}\n"
               "\\lhead{GeneratedTextDocument}\n"
-              "\\rhead{Raven Suggs and Paul Cimarusti}\n";
+              "\\rhead{Raven Suggs, Paul Cimarusti, and Cesar Fandino}\n";
     return header;
+}
+
+std::string LogicToLaTeXFormat(std::string input)
+{
+    std::string outputString = input;
+    for(int stringIndex = 0; stringIndex < input.length(); stringIndex++)
+    {
+        switch(outputString[stringIndex]) {
+            case '&':
+                if(outputString[stringIndex + 1] == '&')
+                {
+                    outputString.erase(stringIndex, 2);
+                    outputString.insert(stringIndex, "\\land ");
+                    stringIndex = stringIndex - 2;
+                    break;
+                }
+                //Adds escape character \ to the & sign since it would otherwise cause a compilation error
+                if(outputString[stringIndex - 1] != '\\')
+                {
+                    outputString.insert(stringIndex - 1, "\\");
+                    stringIndex = stringIndex - 1;
+                }
+                break;
+            case '-':
+                if(outputString[stringIndex + 1] == '>')
+                {
+                    outputString.erase(stringIndex, 2);
+                    outputString.insert(stringIndex, "\\rightarrow ");
+                    stringIndex = stringIndex - 2;
+                    break;
+                }
+                break;
+            case '|':
+                if(outputString[stringIndex + 1] == '|')
+                {
+                    outputString.erase(stringIndex, 2);
+                    outputString.insert(stringIndex, "\\lor ");
+                    stringIndex = stringIndex - 2;
+                    break;
+                }
+                break;
+            case '<':
+                if(outputString[stringIndex + 1] == '>')
+                {
+                    outputString.erase(stringIndex, 2);
+                    outputString.insert(stringIndex, "\\leftrightarrow ");
+                    stringIndex = stringIndex - 2;
+                    break;
+                }
+                break;
+            case '!':
+                outputString.erase(stringIndex, 1);
+                outputString.insert(stringIndex, "\\neg ");
+                stringIndex = stringIndex - 1;
+                break;
+            default:
+                break;
+
+        }
+    }
+    return outputString;
+}
+
+std::string TruthToLaTeXFormat(bool truth)
+{
+    if(truth)
+    {
+        return "T";
+    }
+    return "F";
 }
 
 std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::vector<std::string> logicList)
@@ -289,23 +359,23 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
             headerString += "$" + nameList[varIndex] + "$";
     }
     //Logical Expressions header
-    //Need to fix formatting so that the entered &&, ||, ->, <>, use proper formatting on the table for the condition
+    //Uses outside function to convert to a LaTeX friendly and prettier formatting
     //& is a key character for LaTeX so using it without a \ breaks compilation
     if(!logicList.empty())
     {
         for (int logicIndex = 0; logicIndex < logicList.size(); logicIndex++)
         {
             if (logicIndex < logicList.size() - 1)
-                headerString += "$" + logicList[logicIndex] + "$ & ";
+                headerString += "$" + LogicToLaTeXFormat(logicList[logicIndex]) + "$ & ";
             else
-                headerString += "$" + logicList[logicIndex] + "$";
+                headerString += "$" + LogicToLaTeXFormat(logicList[logicIndex]) + "$";
         }
     }
     truthTable += "\t \t" + headerString + " \\\\\n";
 
     //Making Truth Table body
     int columns = static_cast<int>(nameList.size() + logicList.size());
-    int rows = static_cast<int>(pow(2, columns));
+    int rows = static_cast<int>(pow(2, static_cast<int>(nameList.size())));
     bool truth[columns][rows];
     for(int rowIndex = 0; rowIndex < rows; rowIndex++)
     {
@@ -322,15 +392,15 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
 
         //Converting the binary representation into a string so that we can match its size to the columnIndex
         std::string binaryStr = std::to_string(binaryNumber);
-        while(binaryStr.length() < columns)
+        while(binaryStr.length() < nameList.size())
         {
             binaryStr.insert(binaryStr.begin(), '0');
         }
         std::cout << binaryStr << std::endl;
         //Setting truth table column truth value to be false if the binary number has a 1 in its index
-        for(int columnIndex = 0; columnIndex < columns - logicList.size(); columnIndex++)
+        for(int columnIndex = 0; columnIndex < nameList.size(); columnIndex++)
         {
-            if(binaryStr[columnIndex] == 1)
+            if(binaryStr[columnIndex] == '0')
             {
                 truth[columnIndex][rowIndex] = true;
             }
@@ -342,12 +412,22 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
         //Now we add the logic expressions for this row to the 2-D truth array
         //Need to find out how to read user input and use built-in boolean to handle
         //I think a good way to do it is to utilize the NamesList list and get the index of that variable when it is found in the logic expression input
-        for(int columnIndex = columns - logicList.size(); columnIndex < columns; columnIndex++)
+        for(int columnIndex = columns - logicList.size(), loopIndex = 0; columnIndex < columns; columnIndex++, loopIndex++)
         {
-            
+            //Need to tokenize logic string, then use a shunting yard algorithm to parse logic
+            truth[columnIndex][rowIndex] = true;
         }
 
         //Finally print the completed row to the latex document with proper formatting
+        std::string truthRow;
+        for(int columnIndex = 0; columnIndex < columns; columnIndex++)
+        {
+            if (columnIndex < columns - 1)
+                truthRow += "$" + TruthToLaTeXFormat(truth[columnIndex][rowIndex]) + "$ & ";
+            else
+                truthRow += "$" + TruthToLaTeXFormat(truth[columnIndex][rowIndex]) + "$";
+        }
+        truthTable += "\t \t" + truthRow + "\\\\\n";
     }
     truthTable += "\t \\end{tabular}\n";
     truthTable += "\\end{center}\n";
