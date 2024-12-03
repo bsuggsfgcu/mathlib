@@ -244,7 +244,7 @@ std::vector<std::string> MakeLogicExpressionList()
     std::cout << "&& for and (conjuction)\n";
     std::cout << "|| for logical or (disjunction)\n";
     std::cout << "-> for conditional\n";
-    std::cout << "<> for bijunction\n";
+    std::cout << "<> for biconditional\n";
     // https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces
     std::getline(std::cin, input );
     //Return early if user entered empty input, so that the return is an empty vector instead of a vector with one element which is an empty string "".
@@ -368,7 +368,7 @@ std::string LogicToLaTeXFormat(std::string input, std::string &operation)
             case '!':
                 outputString.erase(stringIndex, 1);
                 outputString.insert(stringIndex, "\\neg ");
-                stringIndex = stringIndex - 1;
+                //stringIndex = stringIndex - 1;
                 //operation = "!";
                 break;
             default:
