@@ -1,7 +1,7 @@
 // Coder/Developer: Cesar Fandino, Raven Suggs, & Paul Cimarusti
 // Class:           COP 2006-80599, Fall 2024
 // Date:            September 19, 2024
-// Description:     C Program to Demonstrate the working of if-else statement
+// Description:     C++ Math Library Program
 // Log:             September 19, Project start
 //                  September 20, Created isPrime function
 //                  October 3, Started work on derivatives
@@ -11,10 +11,13 @@
 //                  November 12, Code cleaned up and mac-os to windows-os fixes, added tex /end statements to fix the tex file
 //                  November 13, Set up truth table generation using binary, and set up taking user expressions and storing into a vector of strings to test using the truth table
 //                  November 13, Derivatives draft work and input validation
-//                  
-//Sources:          https://www.geeksforgeeks.org/stdstringinsert-in-c/
+//                  November 18, Set up saving truth table operation as variables
+//                  December 2, Finished basic truth table with negation support and one operation
+// Sources:         https://www.geeksforgeeks.org/stdstringinsert-in-c/
 //                  https://www.scaler.com/topics/cpp/binary-representation-of-a-number/
+//                  https://www.geeksforgeeks.org/tokenizing-a-string-cpp/
 #include "library.h"
+#include <regex>
 
 
 // UTILITIES
@@ -308,7 +311,7 @@ std::string LaTeX::GenerateLaTeXHeader(const std::vector<std::string>& packageLi
 std::string LogicToLaTeXFormat(std::string input, std::string &operation)
 {
     std::string outputString = input;
-    for(int stringIndex = 0; stringIndex < input.length(); stringIndex++)
+    for(int stringIndex = 0; stringIndex < outputString.length(); stringIndex++)
     {
         switch(outputString[stringIndex]) {
             case '&':
@@ -316,16 +319,16 @@ std::string LogicToLaTeXFormat(std::string input, std::string &operation)
                 {
                     outputString.erase(stringIndex, 2);
                     outputString.insert(stringIndex, "\\land ");
-                    stringIndex = stringIndex - 2;
+                    //stringIndex = stringIndex - 2;
                     operation = "&&";
-                    std::cout << operation << std::endl;
+                    //std::cout << operation << std::endl;
                     break;
                 }
                 //Adds escape character \ to the & sign since it would otherwise cause a compilation error
                 if(outputString[stringIndex - 1] != '\\')
                 {
                     outputString.insert(stringIndex - 1, "\\");
-                    stringIndex = stringIndex - 1;
+                    //stringIndex = stringIndex - 1;
                 }
                 break;
             case '-':
@@ -333,9 +336,9 @@ std::string LogicToLaTeXFormat(std::string input, std::string &operation)
                 {
                     outputString.erase(stringIndex, 2);
                     outputString.insert(stringIndex, "\\rightarrow ");
-                    stringIndex = stringIndex - 2;
+                    //stringIndex = stringIndex - 2;
                     operation = "->";
-                    std::cout << operation << std::endl;
+                    //std::cout << operation << std::endl;
                     break;
                 }
                 break;
@@ -344,9 +347,9 @@ std::string LogicToLaTeXFormat(std::string input, std::string &operation)
                 {
                     outputString.erase(stringIndex, 2);
                     outputString.insert(stringIndex, "\\lor ");
-                    stringIndex = stringIndex - 2;
+                    //stringIndex = stringIndex - 2;
                     operation = "||";
-                    std::cout << operation << std::endl;
+                    //std::cout << operation << std::endl;
                     break;
                 }
                 break;
@@ -355,12 +358,13 @@ std::string LogicToLaTeXFormat(std::string input, std::string &operation)
                 {
                     outputString.erase(stringIndex, 2);
                     outputString.insert(stringIndex, "\\leftrightarrow ");
-                    stringIndex = stringIndex - 2;
+                    //stringIndex = stringIndex - 2;
                     operation = "<>";
-                    std::cout << operation << std::endl;
+                    //std::cout << operation << std::endl;
                     break;
                 }
                 break;
+            //Don't save negation into operator since only one operation will work at a time in this solution method
             case '!':
                 outputString.erase(stringIndex, 1);
                 outputString.insert(stringIndex, "\\neg ");
@@ -411,49 +415,73 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
     }
 
     //Declaring string to hold user's operator
-    std::string operation;
+    std::string operation[logicList.size()];
     //Storing index of used variables in logic
-    int variable1 = -1;
-    int variable2 = -1;
+    //Set to -1 by default to function as a null value
+    int variable1[logicList.size()];
+    std::fill(variable1, variable1+logicList.size(), -1);
+    bool variable1Negated[logicList.size()];
+    int variable2[logicList.size()];
+    std::fill(variable2, variable2+logicList.size(), -1);
+    bool variable2Negated[logicList.size()];
     //Logical Expressions header
     //Uses outside function to convert to a LaTeX friendly and prettier formatting
     //& is a key character for LaTeX so using it without a \ breaks compilation
     if(!logicList.empty())
     {
+        //Looping through the logic expressions the user inputted and converting them to a LaTeX format, and saving them as variables to calculate with later
         for (int logicIndex = 0; logicIndex < logicList.size(); logicIndex++)
         {
             if (logicIndex < logicList.size() - 1)
-                headerString += "$" + LogicToLaTeXFormat(logicList[logicIndex], operation) + "$ & ";
+                headerString += "$" + LogicToLaTeXFormat(logicList[logicIndex], operation[logicIndex]) + "$ & ";
             else
-                headerString += "$" + LogicToLaTeXFormat(logicList[logicIndex], operation) + "$";
+                headerString += "$" + LogicToLaTeXFormat(logicList[logicIndex], operation[logicIndex]) + "$";
+
+            //Looping through entire string of a user inputted logic expression
             for(int stringIndex = 0; stringIndex < logicList[logicIndex].length(); stringIndex++)
             {
+                //Repeat process for each variable in nameList
                 for(int nameListIndex = 0; nameListIndex < nameList.size(); nameListIndex++)
                 {
                     std::string variableName = nameList[nameListIndex];
                     if (logicList[logicIndex][stringIndex] == variableName[0])
                     {
-                        //If the first character of the nameList string name is found then it checks for the next characters to see if there is a match
+                        //If the first character of the nameList variable name string name is found then it checks for the next characters to see if there is a complete match
                         bool matching = true;
-                        for(int variableIndex = 1; variableIndex < variableName.length(); variableIndex++)
+
+                        //If the character we are looking at is not at index 0, checks the previous character to see if it is an !, which means that the variable is negated
+                        bool negated = false;
+                        if(stringIndex != 0)
+                        {
+                            if(logicList[logicIndex][stringIndex - 1] == '!')
+                            {
+                                negated = true;
+                            }
+                        }
+
+                        //Keep looping until finding a <, |, &, which mark the expression, or until the end of the logic expression string
+                        for(int variableIndex = 1; variableIndex + stringIndex < logicList[logicIndex].length() && !(logicList[logicIndex][stringIndex + variableIndex] == '&' || logicList[logicIndex][stringIndex + variableIndex] == '-' || logicList[logicIndex][stringIndex + variableIndex] == '|' || logicList[logicIndex][stringIndex + variableIndex] == '<') ; variableIndex++)
                         {
                             if(variableName[variableIndex] != logicList[logicIndex][stringIndex + variableIndex])
                             {
+                                //If a not matching character is found then it ends the loop early and doesn't save the input as a variable to work with
                                 matching = false;
                                 break;
                             }
                         }
                         if(matching)
                         {
-                            if(variable1 != -1)
+                            if(variable1[logicIndex] != -1)
                             {
-                                variable2 = nameListIndex;
-                                std::cout << variable2 << std::endl;
+                                variable2[logicIndex] = nameListIndex;
+                                variable2Negated[logicIndex] = negated;
+                                std::cout << variable2[logicIndex] << std::endl;
                             }
                             else
                             {
-                                variable1 = nameListIndex;
-                                std::cout << variable1 << std::endl;
+                                variable1[logicIndex] = nameListIndex;
+                                variable1Negated[logicIndex] = negated;
+                                std::cout << variable1[logicIndex] << std::endl;
                             }
                         }
                     }
@@ -461,12 +489,14 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
             }
         }
     }
-    truthTable += "\t \t" + headerString + " \\\\\n";
+    truthTable += "\t\t" + headerString + " \\\\\n";
+    truthTable += "\t\t\\hline\n";
+
 
     //Making Truth Table body
     int columns = static_cast<int>(nameList.size() + logicList.size());
     int rows = static_cast<int>(pow(2, static_cast<int>(nameList.size())));
-    bool truth[columns][rows];
+    bool truth[columns];
     for(int rowIndex = 0; rowIndex < rows; rowIndex++)
     {
         int binaryNumber = 0, remainder, rowNumber = rowIndex, digitPlace = 1;
@@ -492,70 +522,82 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
         {
             if(binaryStr[columnIndex] == '0')
             {
-                truth[columnIndex][rowIndex] = true;
+                truth[columnIndex] = true;
             }
             else
             {
-                truth[columnIndex][rowIndex] = false;
+                truth[columnIndex] = false;
             }
         }
-        //Now we add the logic expressions for this row to the 2-D truth array
+        //Now we add the logic expressions for this row to the truth array
         //Need to find out how to read user input and use built-in boolean to handle
         //I think a good way to do it is to utilize the NamesList list and get the index of that variable when it is found in the logic expression input
-        for(int columnIndex = columns - logicList.size(), loopIndex = 0; columnIndex < columns; columnIndex++, loopIndex++)
+        for(int columnIndex = columns - logicList.size(), logicIndex = 0; columnIndex < columns; columnIndex++, logicIndex++)
         {
             //Need to tokenize logic string, then use a shunting yard algorithm to parse logic
+            // std::vector<std::string> tokenizedLogic();
+            // Tokenize user input so that the shunting yard operation will work
+            //Then Save truth value into the table to be printed out later
+            //truth[columnIndex] = true;
 
-            switch(operation[0]) {
-                case '!':
-                    if(truth)
-                    truth[variable1][rowIndex] = false;
-                    break;
+            //Saving truth value into a different spot from the truth table so that it can be negated without changing the table
+            bool truthvar1 = truth[variable1[logicIndex]];
+            bool truthvar2 = truth[variable2[logicIndex]];
+            if(variable1Negated[logicIndex])
+            {
+                truthvar1 = !truthvar1;
+                std::cout << "var1 negated!" << std::endl;
+            }
+            if(variable2Negated[logicIndex])
+            {
+                truthvar2 = !truthvar2;
+                std::cout << "var2 negated!" << std::endl;
+            }
+
+            switch(operation[logicIndex][0])
+            {
                 case '&':
-                if(operation[1] == '&')
-                {
-                    truth[columnIndex][rowIndex] = truth[variable1][rowIndex] && truth[variable2][rowIndex];
-                    break;
-                }
+                    if(operation[logicIndex][1] == '&')
+                    {
+                        truth[columnIndex] = truthvar1 && truthvar2;
+                        break;
+                    }
                 case '-':
-                if(operation[1] == '>')
-                {
-                    truth[columnIndex][rowIndex] = !truth[variable1][rowIndex] || truth[variable2][rowIndex];
+                    if(operation[logicIndex][1] == '>')
+                    {
+                        truth[columnIndex] = !truthvar1 || truthvar2;
+                        break;
+                    }
                     break;
-                }
-                break;
                 case '|':
-                if(operation[1] == '|')
-                {
-                    truth[columnIndex][rowIndex] = truth[variable1][rowIndex] || truth[variable2][rowIndex];
+                    if(operation[logicIndex][1] == '|')
+                    {
+                        truth[columnIndex] = truthvar1 || truthvar2;
+                        break;
+                    }
                     break;
-                }
-                break;
                 case '<':
-                if(operation[1] == '>')
-                {
-                    truth[columnIndex][rowIndex] = (!truth[variable1][rowIndex] || truth[variable2][rowIndex]) && (!truth[variable2][rowIndex] || truth[variable1][rowIndex]);
+                    if(operation[logicIndex][1] == '>')
+                    {
+                        truth[columnIndex] = (!truthvar1|| truthvar2) && (!truthvar2 || truthvar1);
+                        break;
+                    }
                     break;
-                }
-                break;
                 default:
-                break;
-
-        }
-            //truth[columnIndex][rowIndex] = true;
-            logicList[loopIndex];
+                    break;
+            }
         }
 
         //Finally print the completed row to the latex document with proper formatting
-        std::string truthRow;
+        std::string truthRowOut;
         for(int columnIndex = 0; columnIndex < columns; columnIndex++)
         {
             if (columnIndex < columns - 1)
-                truthRow += "$" + TruthToLaTeXFormat(truth[columnIndex][rowIndex]) + "$ & ";
+                truthRowOut += "$" + TruthToLaTeXFormat(truth[columnIndex]) + "$ & ";
             else
-                truthRow += "$" + TruthToLaTeXFormat(truth[columnIndex][rowIndex]) + "$";
+                truthRowOut += "$" + TruthToLaTeXFormat(truth[columnIndex]) + "$";
         }
-        truthTable += "\t \t" + truthRow + "\\\\\n";
+        truthTable += "\t \t" + truthRowOut + "\\\\\n";
     }
     truthTable += "\t \\end{tabular}\n";
     truthTable += "\\end{center}\n";
