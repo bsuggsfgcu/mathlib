@@ -1,3 +1,9 @@
+// Coder/Developer: Cesar Fandino, Raven Suggs, & Paul Cimarusti
+// Class:           COP 2006-80599, Fall 2024
+// Date:            September 19, 2024
+// Description:     C++ Math Library Program
+// Log:             September 19, Project start
+// Log:             November 13, Created example main function to test library functions
 #include "library.h"
 void NumberTheoryMain();
 void calcMain();
