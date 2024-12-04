@@ -13,9 +13,12 @@
 //                  November 13, Derivatives draft work and input validation
 //                  November 18, Set up saving truth table operation as variables
 //                  December 2, Finished basic truth table with negation support and one operation
-// Sources:         https://www.geeksforgeeks.org/stdstringinsert-in-c/
-//                  https://www.scaler.com/topics/cpp/binary-representation-of-a-number/
-//                  https://www.geeksforgeeks.org/tokenizing-a-string-cpp/
+// Sources:         (https://www.geeksforgeeks.org/stdstringinsert-in-c/), lines 324, 333, 341, 352, 363, 373, 520, to insert into an already existing string
+//                  (https://www.scaler.com/topics/cpp/binary-representation-of-a-number/), lines 505-515, to get implementation of converting a number into binary
+//                  (https://www.geeksforgeeks.org/stdall_of-in-cpp/), line 68, using any_of function
+//                  (https://stackoverflow.com/questions/5838711/stdcin-input-with-spaces), lines 218, 251 to get full line of input, including spaces
+//                  (https://www.w3schools.com/cpp/cpp_files.asp), line 277, to open / close files and put text on them
+//                  Dave, line 314, helped out with saving operation as a variable in the LogicToLaTeXFormat function and thinking of how to tackle evaluating expressions
 #include "library.h"
 #include <regex>
 
