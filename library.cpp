@@ -475,13 +475,13 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
                             {
                                 variable2[logicIndex] = nameListIndex;
                                 variable2Negated[logicIndex] = negated;
-                                std::cout << variable2[logicIndex] << std::endl;
+                                //std::cout << variable2[logicIndex] << std::endl;
                             }
                             else
                             {
                                 variable1[logicIndex] = nameListIndex;
                                 variable1Negated[logicIndex] = negated;
-                                std::cout << variable1[logicIndex] << std::endl;
+                                //std::cout << variable1[logicIndex] << std::endl;
                             }
                         }
                     }
@@ -546,12 +546,12 @@ std::string LaTeX::GenerateTruthTable(std::vector<std::string> nameList, std::ve
             if(variable1Negated[logicIndex])
             {
                 truthvar1 = !truthvar1;
-                std::cout << "var1 negated!" << std::endl;
+                //std::cout << "var1 negated!" << std::endl;
             }
             if(variable2Negated[logicIndex])
             {
                 truthvar2 = !truthvar2;
-                std::cout << "var2 negated!" << std::endl;
+                //std::cout << "var2 negated!" << std::endl;
             }
 
             switch(operation[logicIndex][0])
